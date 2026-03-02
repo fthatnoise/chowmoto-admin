@@ -7,12 +7,12 @@ import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 // (Step 3 of the setup guide — same config as guest app)
 // ─────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey: "AIzaSyDE6cnSP-WxTGh7OS7QIZFYe_vNNUzOFLk",
-  authDomain: "chowmoto-rsvp.firebaseapp.com",
-  projectId: "chowmoto-rsvp",
-  storageBucket: "chowmoto-rsvp.firebasestorage.app",
-  messagingSenderId: "246753994914",
-  appId: "1:246753994914:web:4733bfeb2bed1e8a564ffb"
+  apiKey: "PASTE_YOUR_API_KEY",
+  authDomain: "PASTE_YOUR_AUTH_DOMAIN",
+  projectId: "PASTE_YOUR_PROJECT_ID",
+  storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
+  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
+  appId: "PASTE_YOUR_APP_ID"
 };
 // ─────────────────────────────────────────────
 
@@ -25,7 +25,8 @@ const SEED_GUESTS = [{"id":1,"name":"Jeffrey Chow","plusOne":false,"plusOneName"
 ;
 
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Montserrat:wght@300;400;500;600&display=swap');
+  @import url('https://db.onlinewebfonts.com/c/014289f5382a33edc09284a90947e6fd?family=Moret+Extrabold');
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -83,8 +84,8 @@ const STYLES = `
     opacity: 0.7;
   }
   .header h1 {
-    font-family: 'Playfair Display', serif;
-    font-weight: 800;
+    font-family: 'Moret Extrabold', serif;
+    font-weight: 400;
     font-size: clamp(32px, 5vw, 54px);
     line-height: 1.05;
     position: relative;
@@ -160,9 +161,9 @@ const STYLES = `
     text-align: center;
   }
   .stat-number {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Moret Extrabold', serif;
     font-size: 44px;
-    font-weight: 800;
+    font-weight: 400;
     color: var(--burg);
     line-height: 1;
   }
@@ -187,9 +188,9 @@ const STYLES = `
     margin-bottom: 24px;
   }
   .section-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Moret Extrabold', serif;
     font-size: 22px;
-    font-weight: 800;
+    font-weight: 400;
     color: var(--burg);
     margin-bottom: 20px;
     padding-bottom: 14px;
@@ -301,9 +302,9 @@ const STYLES = `
     margin-top: 16px;
   }
   .rsvp-panel-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Moret Extrabold', serif;
     font-size: 26px;
-    font-weight: 800;
+    font-weight: 400;
     color: var(--burg);
     margin-bottom: 20px;
   }
@@ -452,10 +453,10 @@ const STYLES = `
     opacity: 0.35;
   }
   .empty-state p {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Moret Extrabold', serif;
     font-size: 20px;
     font-style: italic;
-    font-weight: 700;
+    font-weight: 400;
     color: var(--burg);
     margin-bottom: 8px;
     opacity: 0.6;
