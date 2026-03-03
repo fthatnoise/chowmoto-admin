@@ -573,7 +573,10 @@ export default function WeddingRSVP() {
   }, [guests, loaded]);
 
   const searchResults = searchQuery.trim().length > 0
-    ? guests.filter(g => g.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    ? guests.filter(g =>
+        g.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (g.plusOneName && g.plusOneName.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
     : [];
 
   function addGuest() {
@@ -784,8 +787,16 @@ export default function WeddingRSVP() {
                       <td style={{ fontSize: "12px", color: "#9e9286" }}>{g.email || "—"}</td>
                       <td><StatusBadge status={g.venues.Picnic} /></td>
                       <td><StatusBadge status={g.venues.Ortliebs} /></td>
-                      <td style={{ color: g.plusOne ? "#c9a96e" : "#b0a898", fontSize: "12px", letterSpacing: "1px" }}>
-                        {g.plusOne ? (g.plusOneName || "Yes") : "—"}
+                      <td style={{ fontSize: "12px", letterSpacing: "1px" }}>
+                        {g.plusOne && g.plusOneName ? (
+                          <span style={{
+                            color: g.plusOneConfirmed === false ? "rgba(90,14,30,0.3)" : "#5a0e1e",
+                            textDecoration: g.plusOneConfirmed === false ? "line-through" : "none",
+                            opacity: g.plusOneConfirmed === false ? 0.5 : 1
+                          }}>
+                            {g.plusOneName}
+                          </span>
+                        ) : "—"}
                       </td>
                       <td>
                         <div className="actions-cell">
