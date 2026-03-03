@@ -2,10 +2,6 @@ import { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
-// ─────────────────────────────────────────────
-// PASTE YOUR FIREBASE CONFIG HERE
-// (Step 3 of the setup guide — same config as guest app)
-// ─────────────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyDE6cnSP-WxTGh7OS7QIZFYe_vNNUzOFLk",
   authDomain: "chowmoto-rsvp.firebaseapp.com",
@@ -14,7 +10,6 @@ const firebaseConfig = {
   messagingSenderId: "246753994914",
   appId: "1:246753994914:web:4733bfeb2bed1e8a564ffb"
 };
-// ─────────────────────────────────────────────
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -566,15 +561,12 @@ export default function WeddingRSVP() {
   }, []);
 
   useEffect(() => {
-    async function save() {
-      if (!loaded) return;
-      try {
+    if (!loaded) return;
+    try {
         await setDoc(doc(db, "wedding", "guests"), { list: guests });
       } catch (e) {
         console.error("Firebase save error:", e);
       }
-    }
-    save();
   }, [guests, loaded]);
 
   const searchResults = searchQuery.trim().length > 0
@@ -688,7 +680,7 @@ export default function WeddingRSVP() {
                 {searchResults.map(g => (
                   <div key={g.id} className="search-result-item" onClick={() => { setSelectedGuest(g); setSearchQuery(g.name); }}>
                     <span className="guest-name-text">{g.name}</span>
-                    <StatusBadge status={g.venues.Ceremony === true || g.venues.Reception === true ? true : g.venues.Ceremony === false && g.venues.Reception === false ? false : null} />
+                    <StatusBadge status={g.venues.Picnic === true || g.venues.Ortliebs === true ? true : g.venues.Picnic === false && g.venues.Ortliebs === false ? false : null} />
                   </div>
                 ))}
               </div>
@@ -776,8 +768,8 @@ export default function WeddingRSVP() {
                   <tr>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Ceremony</th>
-                    <th>Reception</th>
+                    <th>Picnic</th>
+                    <th>Ortliebs</th>
                     <th>Plus One</th>
                     <th>Actions</th>
                   </tr>
@@ -787,8 +779,8 @@ export default function WeddingRSVP() {
                     <tr key={g.id}>
                       <td>{g.name}</td>
                       <td style={{ fontSize: "12px", color: "#9e9286" }}>{g.email || "—"}</td>
-                      <td><StatusBadge status={g.venues.Ceremony} /></td>
-                      <td><StatusBadge status={g.venues.Reception} /></td>
+                      <td><StatusBadge status={g.venues.Picnic} /></td>
+                      <td><StatusBadge status={g.venues.Ortliebs} /></td>
                       <td style={{ color: g.plusOne ? "#c9a96e" : "#b0a898", fontSize: "12px", letterSpacing: "1px" }}>
                         {g.plusOne ? (g.plusOneName || "Yes") : "—"}
                       </td>
