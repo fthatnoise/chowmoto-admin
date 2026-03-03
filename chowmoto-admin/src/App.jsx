@@ -618,8 +618,8 @@ export default function WeddingRSVP() {
   // Stats
   const totalGuests = guests.length;
   const totalWithPlusOne = guests.filter(g => g.plusOne).length;
-  const ceremonyAttending = guests.filter(g => g.venues.Picnic === true).length + guests.filter(g => g.venues.Picnic === true && g.plusOne).length;
-  const receptionAttending = guests.filter(g => g.venues.Ortliebs === true).length + guests.filter(g => g.venues.Ortliebs === true && g.plusOne).length;
+  const ceremonyAttending = guests.filter(g => g.venues.Picnic === true).length + guests.filter(g => g.venues.Picnic === true && g.plusOne && g.plusOneConfirmed !== false).length;
+  const receptionAttending = guests.filter(g => g.venues.Ortliebs === true).length + guests.filter(g => g.venues.Ortliebs === true && g.plusOne && g.plusOneConfirmed !== false).length;
   const pendingCount = guests.filter(g => g.venues.Picnic === null || g.venues.Ortliebs === null).length;
 
   // Filtered guest list
