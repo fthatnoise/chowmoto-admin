@@ -562,11 +562,14 @@ export default function WeddingRSVP() {
 
   useEffect(() => {
     if (!loaded) return;
-    try {
+    async function save() {
+      try {
         await setDoc(doc(db, "wedding", "guests"), { list: guests });
       } catch (e) {
         console.error("Firebase save error:", e);
       }
+    }
+    save();
   }, [guests, loaded]);
 
   const searchResults = searchQuery.trim().length > 0
