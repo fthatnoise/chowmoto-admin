@@ -561,8 +561,7 @@ export default function WeddingRSVP() {
             };
           });
           setGuests(merged);
-          // Write merged list back so Firebase always has full guest data
-          await setDoc(ref, { list: merged });
+          // NO write-back on load — preserves saved RSVPs
         } else {
           setGuests(SEED_GUESTS);
           await setDoc(ref, { list: SEED_GUESTS });
@@ -576,18 +575,6 @@ export default function WeddingRSVP() {
     load();
   }, []);
 
-  useEffect(() => {
-    if (!loaded) return;
-    async function save() {
-      try {
-        await setDoc(doc(db, "wedding", "guests"), { list: guests });
-      } catch (e) {
-        console.error("Firebase save error:", e);
-      }
-    }
-    save();
-  }, [guests, loaded]);
-
   const searchResults = searchQuery.trim().length > 0
     ? guests.filter(g =>
         g.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -599,34 +586,55 @@ export default function WeddingRSVP() {
     const name = newGuestName.trim();
     if (!name) return;
     if (guests.find(g => g.name.toLowerCase() === name.toLowerCase())) return;
-    setGuests(prev => [...prev, { id: Date.now(), name, plusOne: false, venues: { Picnic: null, Ortliebs: null } }]);
+    setGuests(prev => {
+      const next = [...prev, { id: Date.now(), name, plusOne: false, venues: { Picnic: null, Ortliebs: null } }];
+      setDoc(doc(db, "wedding", "guests"), { list: next }).catch(e => console.error("Save error:", e));
+      return next;
+    });
     setNewGuestName("");
   }
 
   function deleteGuest(id) {
-    setGuests(prev => prev.filter(g => g.id !== id));
+    setGuests(prev => {
+      const next = prev.filter(g => g.id !== id);
+      setDoc(doc(db, "wedding", "guests"), { list: next }).catch(e => console.error("Save error:", e));
+      return next;
+    });
     if (selectedGuest?.id === id) setSelectedGuest(null);
   }
 
   function updateVenue(guestId, venue, value) {
-    setGuests(prev => prev.map(g => {
-      if (g.id !== guestId) return g;
-      const updated = { ...g, venues: { ...g.venues, [venue]: value } };
-      if (selectedGuest?.id === guestId) setSelectedGuest(updated);
-      return updated;
-    }));
+    setGuests(prev => {
+      const next = prev.map(g => {
+        if (g.id !== guestId) return g;
+        const updated = { ...g, venues: { ...g.venues, [venue]: value } };
+        if (selectedGuest?.id === guestId) setSelectedGuest(updated);
+        return updated;
+      });
+      setDoc(doc(db, "wedding", "guests"), { list: next }).catch(e => console.error("Save error:", e));
+      return next;
+    });
   }
 
   function togglePlusOne(guestId) {
-    setGuests(prev => prev.map(g => {
-      if (g.id !== guestId) return g;
-      const updated = { ...g, plusOne: !g.plusOne };
-      if (selectedGuest?.id === guestId) setSelectedGuest(updated);
-      return updated;
-    }));
+    setGuests(prev => {
+      const next = prev.map(g => {
+        if (g.id !== guestId) return g;
+        const updated = { ...g, plusOne: !g.plusOne };
+        if (selectedGuest?.id === guestId) setSelectedGuest(updated);
+        return updated;
+      });
+      setDoc(doc(db, "wedding", "guests"), { list: next }).catch(e => console.error("Save error:", e));
+      return next;
+    });
   }
 
-  function saveAndClear() {
+  async function saveAndClear() {
+    try {
+      await setDoc(doc(db, "wedding", "guests"), { list: guests });
+    } catch (e) {
+      console.error("Firebase save error:", e);
+    }
     setSelectedGuest(null);
     setSearchQuery("");
   }
